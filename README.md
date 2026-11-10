@@ -68,6 +68,6 @@ Run the unit tests to see valid and invalid cases. The GitHub Actions workflow a
 
 ## Limits and authorship
 
-The model does not prove structural strength, printability, or a real-world fit. A physical prototype would need a material choice, printer tolerance check, screw selection, and load test. This project was created with AI assistance and is a new portfolio study; it is not a claim of prior professional OpenSCAD experience or a contribution to an established open-source project. Anyone presenting it should review the code, run the 3D export, and be able to explain the design decisions.
+The model does not prove structural strength, printability, or a real-world fit. A physical prototype would need a material choice, printer tolerance check, screw selection, and load test. This is a new portfolio study; it is not a claim of prior professional OpenSCAD experience or a contribution to an established open-source project. Anyone presenting it should review the code, run the 3D export, and be able to explain the design decisions.
 
 OpenSCAD CLI reference: [Using OpenSCAD in a command line environment](https://files.openscad.org/documentation/manual/Using_OpenSCAD_in_a_command_line_environment.html).
