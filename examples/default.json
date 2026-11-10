@@ -1,0 +1,15 @@
+{
+  "panel_width": 160.0,
+  "panel_thickness": 3.0,
+  "width_clearance_each_side": 0.5,
+  "thickness_clearance_total": 0.4,
+  "base_depth": 55.0,
+  "base_thickness": 5.0,
+  "wall_thickness": 4.0,
+  "back_height": 34.0,
+  "front_height": 14.0,
+  "end_margin": 8.0,
+  "mount_hole_diameter": 5.0,
+  "mount_hole_edge_inset": 14.0,
+  "mount_hole_y": 16.0
+}
