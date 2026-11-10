@@ -1,0 +1,20 @@
+name: Check sign holder
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install OpenSCAD
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openscad
+      - name: Validate Python and export model
+        run: |
+          python3 -m unittest discover -s tests -v
+          python3 build.py examples/default.json --out build --render
+          test -s build/sign-holder.stl
