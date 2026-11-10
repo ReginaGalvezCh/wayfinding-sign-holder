@@ -1,0 +1,4 @@
+build/
+cad/generated_params.scad
+__pycache__/
+*.pyc
