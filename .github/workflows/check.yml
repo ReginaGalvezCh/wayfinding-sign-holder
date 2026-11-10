@@ -20,3 +20,9 @@ jobs:
           test -s build/sign-holder.stl
           test -s build/cross_section.msh
           test -s build/mesh_report.json
+      - name: Keep model and mesh for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: sign-holder-model-and-mesh
+          path: build/
+          if-no-files-found: error
