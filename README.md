@@ -1,8 +1,10 @@
 # Wayfinding Sign Holder
 
+[![Check sign holder](https://github.com/ReginaGalvezCh/wayfinding-sign-holder/actions/workflows/check.yml/badge.svg)](https://github.com/ReginaGalvezCh/wayfinding-sign-holder/actions/workflows/check.yml)
+
 A parametric, 3D-printable holder for a removable event or venue sign. The project pairs a small **Python validation tool** with an **OpenSCAD model**: edit a JSON design, check its dimensions, and export an STL.
 
-> **Status:** portfolio learning project. The default design passes dimensional tests, but it has not been rendered in OpenSCAD here, printed, or load tested.
+> **Status:** portfolio learning project. The default design passes dimensional tests and the GitHub Actions OpenSCAD STL export. It has not been printed or load tested.
 
 ## The design problem
 
@@ -54,7 +56,7 @@ Open the STL in a slicer or the `.scad` file in OpenSCAD to inspect the geometry
 | Symmetric screw holes with edge clearance | Keeps holes in the mounting region and apart from each other. |
 | Hole clearance from the front wall and channel | Avoids cutting into the panel support. |
 
-Run the unit tests to see valid and invalid cases. The GitHub Actions workflow also attempts an OpenSCAD STL export and checks that the file is nonempty. That workflow has not run yet.
+Run the unit tests to see valid and invalid cases. The GitHub Actions workflow also exports an STL with OpenSCAD and checks that the file is nonempty.
 
 ## Files
 
