@@ -9,12 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install OpenSCAD
+      - name: Install OpenSCAD and Gmsh
         run: |
           sudo apt-get update
-          sudo apt-get install -y openscad
-      - name: Validate Python and export model
+          sudo apt-get install -y openscad gmsh
+      - name: Validate Python, export model, and mesh section
         run: |
           python3 -m unittest discover -s tests -v
-          python3 build.py examples/default.json --out build --render
+          python3 build.py examples/default.json --out build --render --mesh
           test -s build/sign-holder.stl
+          test -s build/cross_section.msh
+          test -s build/mesh_report.json

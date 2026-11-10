@@ -87,6 +87,8 @@ def scad_parameters(design: Design) -> str:
 
 
 def report(design: Design) -> dict[str, float | list[float]]:
+    from mesh_section import expected_area
+
     return {
         "base_width_mm": design.base_width,
         "base_depth_mm": design.base_depth,
@@ -94,6 +96,7 @@ def report(design: Design) -> dict[str, float | list[float]]:
         "channel_length_mm": design.panel_width + 2 * design.width_clearance_each_side,
         "mount_hole_centres_x_mm": [design.mount_hole_edge_inset, design.base_width - design.mount_hole_edge_inset],
         "mount_hole_y_mm": design.mount_hole_y,
+        "midspan_section_area_mm2": expected_area(design),
     }
 
 
@@ -103,9 +106,10 @@ def main() -> None:
     parser.add_argument("--out", type=Path, default=Path("build"))
     parser.add_argument("--check", action="store_true", help="validate only; do not write files")
     parser.add_argument("--render", action="store_true", help="export STL with OpenSCAD")
+    parser.add_argument("--mesh", action="store_true", help="mesh the mid-span section with Gmsh")
     args = parser.parse_args()
-    if args.check and args.render:
-        parser.error("--check and --render cannot be combined")
+    if args.check and (args.render or args.mesh):
+        parser.error("--check cannot be combined with --render or --mesh")
     design = load_design(args.config)
     if args.check:
         print(json.dumps(report(design), indent=2))
@@ -116,11 +120,23 @@ def main() -> None:
     params = root / "cad" / "generated_params.scad"
     params.write_text(scad_parameters(design), encoding="utf-8")
     (args.out / "dimensions.json").write_text(json.dumps(report(design), indent=2) + "\n", encoding="utf-8")
+    from mesh_section import cross_section_geo, validate_msh2
+
+    geo_path = args.out / "cross_section.geo"
+    geo_path.write_text(cross_section_geo(design), encoding="utf-8")
     if args.render:
         openscad = shutil.which("openscad")
         if openscad is None:
             raise RuntimeError("OpenSCAD is not installed; parameters and report were written")
         subprocess.run([openscad, "-o", str(args.out / "sign-holder.stl"), str(root / "cad" / "sign_holder.scad")], check=True)
+    if args.mesh:
+        gmsh = shutil.which("gmsh")
+        if gmsh is None:
+            raise RuntimeError("Gmsh is not installed; geometry script and report were written")
+        mesh_path = args.out / "cross_section.msh"
+        subprocess.run([gmsh, str(geo_path), "-2", "-format", "msh2", "-o", str(mesh_path)], check=True)
+        mesh_report = validate_msh2(mesh_path, design)
+        (args.out / "mesh_report.json").write_text(json.dumps(mesh_report, indent=2) + "\n", encoding="utf-8")
     print(f"Validated design; wrote {params} and {args.out / 'dimensions.json'}")
 
 

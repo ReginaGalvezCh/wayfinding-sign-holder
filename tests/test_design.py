@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from build import load_design, report, scad_parameters
+from mesh_section import cross_section_geo, expected_area
 
 
 CONFIG = Path(__file__).resolve().parents[1] / "examples" / "default.json"
@@ -34,6 +35,21 @@ class DesignTests(unittest.TestCase):
     def test_parameter_export_is_deterministic(self):
         self.assertEqual(scad_parameters(self.design), scad_parameters(load_design(CONFIG)))
         self.assertIn("panel_width = 160;", scad_parameters(self.design))
+
+    def test_section_has_expected_area_and_named_boundaries(self):
+        geo = cross_section_geo(self.design)
+        points = []
+        for line in geo.splitlines():
+            if line.startswith("Point("):
+                coordinates = line.split("{", 1)[1].split("}", 1)[0].split(",")
+                points.append((float(coordinates[0]), float(coordinates[1])))
+        signed_area = sum(
+            x1 * y2 - x2 * y1
+            for (x1, y1), (x2, y2) in zip(points, points[1:] + points[:1])
+        ) / 2
+        self.assertAlmostEqual(signed_area, expected_area(self.design))
+        self.assertIn('Physical Curve("mounting_edge", 1)', geo)
+        self.assertIn('Physical Curve("panel_channel_floor", 2)', geo)
 
     def test_unexpected_configuration_key_is_rejected(self):
         data = json.loads(CONFIG.read_text(encoding="utf-8"))
