@@ -66,6 +66,7 @@ The mesh has named physical groups for the mounting edge, panel channel floor, a
 | Hole clearance from the front wall and channel | Avoids cutting into the panel support. |
 
 Run the unit tests to see valid and invalid cases. The GitHub Actions workflow exports an STL with OpenSCAD, generates a Gmsh mesh, and checks the mesh area and boundary groups.
+Each successful run also offers a `sign-holder-model-and-mesh` artifact containing the STL, mesh, geometry script, and dimension reports for inspection.
 
 ## Files
 
